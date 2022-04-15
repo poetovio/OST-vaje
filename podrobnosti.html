@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spletna trgovina</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="js.js"></script>
+</head>
+
+<body>
+    <div id="header">
+        <h1>Moja trgovija</h1>
+
+        <p align="right" id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></p>
+    </div>
+
+    <hr />
+    <a href="index.html">Domov</a>
+    <a href="izdelki.html">Izdelki</a>
+    <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="narocnina.html">Naročnina</a>
+    <a align="right" href="kosarica.html">Košarica</a>
+    <hr />
+
+    <div class="container">
+        <h2>Podrobnosti izdelkov</h2>
+
+        <table>
+            <tr>
+                <th>Artikel</th>
+                <th>Opis</th>
+                <th>Cena</th>
+                <th>Št. kosov na voljo</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Majica</td>
+                <td>Kolesarska majica</td>
+                <td>15€</td>
+                <td>10</td>
+                <td><a href="Slike/Blue_Tshirt.jpg" id="a1"><img src="Slike/Blue_Tshirt.jpg" width="100px"
+                            height="100px" />
+                    </a> 
+                </td>
+                <td><button onclick="dodaj('majica', 15, 1, 0)">Dodaj v košarico</button></td>
+            </tr>
+            <tr>
+                <td>Hlače</td>
+                <td>Kolesarske hlače</td>
+                <td>20€</td>
+                <td>5</td>
+                <td> <img src="Slike/Hlace.jpg" width="100px" height="100px" /> </td>
+                <td><button onclick="dodaj('hlače', 20, 1, 10)">Dodaj v košarico</button></td>
+            </tr>
+            <tr>
+                <td>Čevlji</td>
+                <td>Pohodniške čevlje</td>
+                <td>140€</td>
+                <td>15</td>
+                <td></td>
+                <td><button onclick="dodaj()">Dodaj v košarico</button></td>
+            </tr>
+        </table>
+    </div>
+
+    <hr />
+    <i>Kontakt: <a href="mailto:viktor.taneski@um.si">viktor.taneski@um.si</a></i>
+</body>
+
+</html>

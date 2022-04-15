@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spletna trgovina</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="js.js"></script>
+</head>
+
+<script src="registracija.js"></script>
+
+<body>
+    <div id="header">
+        <h1>Moja trgovina</h1>
+
+        <p id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></a></p>
+    </div>
+
+    <hr />
+    <a href="index.html">Domov</a>
+    <a href="izdelki.html">Izdelki</a>
+    <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="narocnina.html">Naročnina</a>
+    <hr />
+
+    <div class="container">
+        <h2>Registracija</h2>
+
+        <form action="" name="myForm" onsubmit="validate()" method="POST">
+            <table>
+                <tr>
+                    <td>
+                        Ime
+                    </td>
+                    <td>
+                        <input type="text" name="ime" />
+                    </td>
+                <tr>
+                    <td>
+                        Priimek
+                    </td>
+                    <td>
+                        <input type="text" name="priimek" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Geslo:
+                    </td>
+                    <td>
+                        <input type="password" name="geslo" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Ponovno geslo:
+                    </td>
+                    <td>
+                        <input type="password" name="geslo1" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Spol
+                    </td>
+                    <td>
+                        <input type="radio" name="spol" value="M" />Moški
+                        <input type="radio" name="spol" value="Z" />Ženski
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Ali se strinjate s pogoji?
+                    </td>
+                    <td>
+                        <input type="checkbox" name="pogoji" value="Y" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Kraj</td>
+                    <td>
+                        <select name="kraj">
+                            <option value="MB">Maribor</option>
+                            <option value="LJ">Ljubljana</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input id="gumbRegistracije" type="submit" name="submit" value="OK">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <hr />
+    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+</body>
+
+</html>

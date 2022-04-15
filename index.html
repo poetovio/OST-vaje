@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spletna trgovina Diether</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+
+<script>
+
+    let akcija1 = setInterval(function() {
+        let besedilo = izracunajDatum('Mar 31, 2022 00:00:00');
+
+        document.getElementById('akcija1').innerHTML = besedilo;
+    }, 1000);
+
+    let akcija2 = setInterval(function() {
+        let besedilo = izracunajDatum('2022, 04, 10');
+
+        document.getElementById('akcija2').innerHTML = besedilo;
+    }, 1000);
+
+    let akcija3 = setInterval(function() {
+        let besedilo = izracunajDatum('2022, 05, 15');
+
+        document.getElementById('akcija3').innerHTML = besedilo;
+    }, 1000);
+
+    let akcija4 = setInterval(function() {
+        let besedilo = izracunajDatum('2022, 08, 03');
+
+        document.getElementById('akcija4').innerHTML = besedilo;
+    }, 1000);
+    
+    function izracunajDatum(datum) {
+        const danes = new Date();
+        const datumAkcije = new Date(datum).getTime();
+        const razlika = datumAkcije - danes;
+    
+        if(razlika < 0) {
+            return "Akcija je potekla";
+        }
+    
+        let dnevi = dodajCas(Math.floor(razlika / (3600 * 24 * 1000)));
+        let ure = dodajCas(Math.floor((razlika % (1000 * 3600 * 24)) / (3600 * 1000)));
+        let minute = dodajCas(Math.floor((razlika % (3600 * 1000)) / 60000));
+        let sekunde = dodajCas(Math.floor((razlika % 60000) / 1000));
+    
+        return String(dnevi + ":" + ure + ":" + minute + ":" + sekunde);
+
+    }
+
+    let cas = setInterval(function() {
+        const danes = new Date();
+
+        let ure = dodajCas(danes.getHours());
+        let minute = dodajCas(danes.getMinutes());
+        let sekunde = dodajCas(danes.getSeconds());
+
+        document.getElementById("trenutniCas").innerHTML = "Trenutni čas je " + ure + ":" + minute + ":" + sekunde;
+        setInterval(trenutniCas, 1000);
+    }, 1000);
+
+    function dodajCas(element) {
+        if(element < 10) {
+            element = '0' + element;
+        }
+        return element;
+    }
+</script>
+
+<body onload="trenutniCas()">
+    <div id="header">
+        <div>
+            <h1>Moja trgovina</h1>
+            
+            <div id="trenutniCas"></div>
+        </div>
+
+
+        <p align="right" id="link">LOGIN | 
+            <a href="registracija.html" >REGISTRACIJA</a>
+        </p>
+
+
+    </div>
+
+    <hr />
+    <a href="index.html">Domov</a>
+    <a href="izdelki.html">Izdelki</a>
+    <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="narocnina.html">Naročnina</a>
+    <a align="right" href="kosarica.html">Košarica</a>
+    <hr />
+
+    <div class="container">
+        <p> <i> Trgovina z <b>modernimi</b> oblačili za odrasle. <br />Lahko nas najdete na Koroški cesti 46.</i></p>
+        Glavna vsebina
+        <div>
+            <table>
+                <tr>
+                    <th>Tip Akcije</th>
+                    <th>Datum od</th>
+                    <th>Datum do</th>
+                    <th>Čas do poteka akcije</th>
+                </tr>
+                <tr>
+                    <td>Mastercard & BigBang</td>
+                    <td>1. 3. 2020</td>
+                    <td>31. 3. 2020</td>
+                    <td id="akcija1"></td>
+                </tr>
+                <tr>
+                    <td>Logitech nagradna igra</td>
+                    <td>1. 3. 2020</td>
+                    <td>10. 4. 2020</td>
+                    <td id="akcija2"></td>
+                </tr>
+                <tr>
+                    <td>Dom je tam, kjer je družina</td>
+                    <td>15. 2. 2020</td>
+                    <td>15. 5. 2020</td>
+                    <td id="akcija3"></td>
+                </tr>
+                <tr>
+                    <td>Prednaroči novi Samsung Galaxy S20</td>
+                    <td>11. 2. 2020</td>
+                    <td>8. 3. 2020</td>
+                    <td id="akcija4"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+</body>
+
+</html>
