@@ -36,3 +36,13 @@ table {
 #gumbRegistracija {
     display: hidden;
 }
+
+#teloTabele, #kosaricaTable {
+    color: white;
+    margin-right: 20px;
+}
+
+#skupniZnesek {
+    color: #FFFF66;
+    font-family: 'Courier New', Courier, monospace;
+}

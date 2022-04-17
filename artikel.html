@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Spletna trgovina</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="js.js"></script>
+</head>
+
+<body>
+    <div id="header">
+        <h1>Moja trgovina</h2>
+
+        <p id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></p>
+    </div>
+
+    <hr />
+    <a href="index.html">Domov</a>
+    <a href="izdelki.html">Izdelki</a>
+    <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="artikel.html">Vnesite svoj artikel</a>
+    <a href="narocnina.html">Naročnina</a>
+    <a href="kosarica.html">Košarica</a>
+    <hr />
+
+    <div class="container">
+        <form action="" name="artikelForm" onsubmit="dodajArtikel()" method="POST">
+            Ime artikla: <input type="text" name="imeArtikla" />
+            Opis atrikla: <input type="text" name="opisArtikla" />
+            Cena artikla: <input type="number" name="cenaArtikla" />
+            <button type="submit">Vnesite artikel</button>
+        </form>
+    </div>
+
+    <hr />
+    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+</body>
+
+</html>

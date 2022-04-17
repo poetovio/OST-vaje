@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Spletna trgovina</title>
-    <link rel="stylesheet" href="css.css">   
+    <link rel="stylesheet" href="css.css">
+    <script src="js.js"></script>
 </head>
 
-<body>
+<body onload="delovanjeIzdelki()">
     <div id="header">
-        <h1>Moja trgovija</h1>
+        <h1>Moja trgovina</h1>
 
         <p align="right" id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></p>
     </div>
@@ -20,23 +21,38 @@
     <a href="index.html">Domov</a>
     <a href="izdelki.html">Izdelki</a>
     <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="artikel.html">Vnesite svoj artikel</a>
     <a href="narocnina.html">Naročnina</a>
-    <a align="right" href="kosarica.html">Košarica</a>
+    <a href="kosarica.html">Košarica</a>
     <hr />
     <div class="container">
         <h2>Seznam izdelkov</h2>
 
-        <ul>
-            <li><a href="podrobnosti.html#a1">Majica</a></li>
-            <li><a href="podrobnosti.html#a2">Hlače</a></li>
-            <li><a href="podrobnosti.html#a3">Pohodniške hlače</a></li>
-            <li><a href="podrobnosti.html">Čevlji</a></li>
-            <li><a href="podrobnosti.html">Smučarska oprema</a></li>
-            </li>
-        </ul>
+        
+        <table>
+            <tr>
+                <th>Ime izdelka</th>
+                <th>Opis izdelka</th>
+                <th>Količina</th>
+                <th>Cena</th>
+                <th></th>
+            </tr>
+            <tbody id="teloTabele">
+
+            </tbody>
+        </table>
+
+        <form action="" name="izdelekForm" onsubmit="return false" method="POST">
+            Ime izdelka: <input id="imeIzdelka" type="text" /><br>
+            Opis izdelka: <input id="opisIzdelka" type="text" /><br>
+            Cena izdelka: <input id="cenaIzdelka" type="number" step="0.01" /><br>
+            Količina: <input id="kolicinaIzdelka" type="number" /><br>
+            <button type="submit" onclick="shraniIzdelek()">Shrani izdelek</button>
+        </form>
+        <div id="obvestiloKreiranjeIzdelka"></div>
     </div>
     <hr />
-    <i>Kontakt: <a href="mailto:viktor.taneski@um.si">viktor.taneski@um.si</a></i>
+    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
 </body>
 
 </html>

@@ -10,9 +10,9 @@
     <script src="js.js"></script>
 </head>
 
-<body onload="generirajTabelo()">
+<body onload="generirajTabelo(); izracunajCeno()">
     <div id="header">
-        <h1>Moja trgovija</h1>
+        <h1>Moja trgovina</h2>
 
         <p align="right" id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></p>
     </div>
@@ -21,19 +21,54 @@
     <a href="index.html">Domov</a>
     <a href="izdelki.html">Izdelki</a>
     <a href="podrobnosti.html">Podrobnosti</a>
+    <a href="artikel.html">Vnesite svoj artikel</a>
+    <a href="narocnina.html">Naročnina</a>
     <a align="right" href="kosarica.html">Košarica</a>
     <hr />
 
     <div class="container">
-        <h2>Podrobnosti izdelkov</h2>
+        <h2>Košarica</h2>
 
-        <div id="table">
+        <table>
+            <tr>
+                <th>Ime izdelka</th>
+                <th>Opis izdelka</th>
+                <th>Količina</th>
+                <th>Cena</th>
+                <th></th>
+            </tr>
+            <tbody id="kosaricaTable"></tbody>
+        </table>
+        <div>
+            Popust:
+            <select onchange="izracunajCeno()" id="popust">
+                <option value="1">Osnovni paket -> 0% popust</option>
+                <option value="0.95">Zlati paket -> 5% popust</option>
+                <option value="0.9">Platina paket -> 10% popust</option>
+                <option value="0.8">Diamantni paket -> 20% popust</option>
+            </select>
 
+            Davek:
+            <select onchange="izracunajCeno()" id="davek">
+                <option value="1">Brez davka</option>
+                <option value="1.22">Osnovni davek - 22%</option>
+            </select>
+
+            Število obrokov:
+            <select onchange="izracunajCeno()" id="obroki">
+                <option value="1">Enkratno plačilo</option>
+                <option value="12">Mesečni obroki</option>
+                <option value="52">Tedenski obroki</option>
+            </select> 
         </div>
     </div>
 
+    <div id="obvestiloKosarica"></div>
+
+    <h1 id="skupniZnesek"></h1>
+
     <hr />
-    <i>Kontakt: <a href="mailto:viktor.taneski@um.si">viktor.taneski@um.si</a></i>
+    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
 </body>
 
 </html>
