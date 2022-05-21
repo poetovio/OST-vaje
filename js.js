@@ -75,7 +75,8 @@ function validate() {
     const geslo = document.forms["myForm"]["geslo"].value;
     const geslo1 = document.forms["myForm"]["geslo1"].value;
     if (ime == "" && ime.length < 3) {
-        alert("Prosimo, vpišite ime");
+        
+        
         return false;
     }
 
@@ -94,7 +95,25 @@ function validate() {
         }
     }
 
-    return true;
+    document.getElementById("vnosIme").value = "";
+    document.getElementById("vnosPriimek").value = "";
+    document.getElementById("vnosGeslo1").value = "";
+    document.getElementById("vnosGeslo2").value = "";
+    $('input[type="radio"][name="spol"]').prop('checked', false);
+    $('input[type="checkbox"]').prop('checked', false);
+    document.getElementById("vnosKraj").value = "MB";
+
+    try {
+        $('#uspesnoR').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    } catch(err) {
+        alert(err);
+    } 
+
+    return false;
+
 }
 
 function dodaj(izdelek, cena, kolicina, popust) {
@@ -162,6 +181,7 @@ function generirajTabelo() {
             celica = vrstica.insertCell(4);
             let gumb = document.createElement('button');
             gumb.setAttribute("onclick", "odstraniIzdelek('" + izdelek.oznaka + "')");
+            gumb.setAttribute("class", "btn btn-success");
             gumb.appendChild(document.createTextNode("Odstrani izdelek iz košarice"));
             celica.appendChild(gumb);
 
@@ -203,17 +223,30 @@ function shraniIzdelek() {
                     stevilo++;
                     delovanjeIzdelki();
                     document.getElementById('obvestiloKreiranjeIzdelka').innerHTML = "Izdelek je bil uspesno dodan.";
+
+                    try {
+                        $('#uspesnoI').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+                    } catch(err) {
+                        alert(err);
+                    }
                 } else {
-                    alert("Opis mora biti tipa string ter dolg vsaj 5 znakov!");
+                    window.alert("Opis mora biti tipa string ter dolg vsaj 5 znakov!");
+                    document.getElementById("opisIzdelka").focus();
                 }
             } else {
-                alert("Kolicina ne sme biti negativna!");
+                window.alert("Kolicina ne sme biti negativna!");
+                document.getElementById("kolicinaIzdelka").focus();
             }
         } else {
-            alert("Cena ne sme biti negativna!");
+            window.alert("Cena ne sme biti negativna!");
+            document.getElementById("cenaIzdelka").focus();
         }
     } else {
-        alert("Ime more biti tipa string in dolgo najmanj 3 znake!");
+        window.alert("Ime more biti tipa string in dolgo najmanj 3 znake!");
+        document.getElementById("imeIzdelka").focus();
     }
 }
 
@@ -224,25 +257,45 @@ function dodajArtikel() {
 
     if(ime.length > 2 && typeof ime === "string") {
         if(opis.length > 4 && typeof opis === "string") {
-            if(cena >= 0) {
+            if(cena >= 0 && cena.length != 0) {
                 let artikel = {
                     ime: ime,
                     opis: opis,
                     cena: cena
                 };
                 artikli.push(artikel);
-                alert("Dodan artikel " + ime);
+
+                document.getElementById("imeArtikla").value = "";
+                document.getElementById("opisArtikla").value = "";
+                document.getElementById("cenaArtikla").value = "";
+
+                try {
+                    $('#uspesnoA').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+
+                } catch(err) {
+                    alert(err);
+                }
             } else {
-                alert("Cena ne sme biti negativna ter mora biti tipa number!");
+                window.alert("Cena izdelka ne sme biti negativna!");
+                document.getElementById("cenaArtikla").focus();
+
+                return false;
             }
         } else {
-            alert("Opis mora imeti vsaj 5 znakov in mora biti tipa string!")
+            window.alert("Opis mora imeti vsaj 5 znakov in mora biti tipa string!")
+            document.getElementById("opisArtikla").focus();
+            return false;
         }
     } else {
-        alert("Ime mora imeti vsaj 3 znake ter mora biti tipa string!");
+        window.alert("Ime mora imeti vsaj 3 znake ter mora biti tipa string!");
+        document.getElementById("imeArtikla").focus();
+        return false;
     }
 
-    return true;
+    return false;
 }
 
 function izdelekKosarica(oznaka) {
@@ -287,6 +340,7 @@ function delovanjeIzdelki() {
         celica = vrstica.insertCell(4);
         let gumb = document.createElement('button');
         gumb.setAttribute("onclick", "izdelekKosarica('izdelek" + stevilo + "')");
+        gumb.setAttribute("class", "btn btn-success");
         gumb.appendChild(document.createTextNode("Dodaj izdelek v košarico"));
         celica.appendChild(gumb);
 
@@ -312,3 +366,10 @@ function izracunajCeno() {
     document.getElementById("skupniZnesek").innerHTML = "Skupni znesek: " + ((davek * popust * znesek)/obroki).toFixed(2) + " €";
 }
 
+function cas(gumb) {
+    if(!gumb) {
+        setTimeout(cas(gumb), 500);
+    } else {
+        return;
+    }
+}

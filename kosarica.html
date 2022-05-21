@@ -8,39 +8,56 @@
     <title>Spletna trgovina</title>
     <link rel="stylesheet" href="css.css">
     <script src="js.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
 </head>
 
 <body onload="generirajTabelo(); izracunajCeno()">
     <div id="header">
-        <h1>Moja trgovina Diether</h2>
-
-        <p align="right" id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></p>
+       
+        <h1 class="belo" style="text-align: center;">Moja trgovina Diether</h1>
+        
+        <div class="row">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-12">
+                <div class="dropdown" style="margin-left: 15%;">
+                    <button class="btn btn-light dropdown-toggle"  type="button" id="vrstica" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Meni</button>
+                    <div class="dropdown-menu" aria-labelledby="vrstica">
+                        <a class="dropdown-item" href="index.html">Domov</a>
+                        <a class="dropdown-item" href="izdelki.html">Izdelki</a>
+                        <a class="dropdown-item" href="artikel.html">Vnesite svoj artikel</a>
+                        <a class="dropdown-item" href="narocnina.html">Naročnina</a>
+                        <a class="dropdown-item" href="kosarica.html">Košarica</a>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 col-12" align="center">
+                <a class="btn btn-light" href="#" role="button">LOGIN</a>
+                <a class="btn btn-light" href="registracija.html" role="button">REGISTRACIJA</a>
+            </div>
+        </div> 
+        
     </div>
 
-    <hr />
-    <a href="index.html">Domov</a>
-    <a href="izdelki.html">Izdelki</a>
-    <a href="artikel.html">Vnesite svoj artikel</a>
-    <a href="narocnina.html">Naročnina</a>
-    <a align="right" href="kosarica.html">Košarica</a>
-    <hr />
-
     <div class="container">
-        <h2>Košarica</h2>
+        <h2 style="text-align: center;">Košarica</h2>
 
-        <table>
-            <tr>
-                <th>Ime izdelka</th>
-                <th>Opis izdelka</th>
-                <th>Količina</th>
-                <th>Cena</th>
-                <th></th>
-            </tr>
+        <table class="table table-hover w-100">
+            <thread>
+                <tr>
+                    <th scope="col">Ime izdelka</th>
+                    <th scope="col">Opis izdelka</th>
+                    <th scope="col">Količina</th>
+                    <th scope="col">Cena</th>
+                    <th scope="col"></th>
+                </tr>
+            </thread>
             <tbody id="kosaricaTable"></tbody>
         </table>
-        <div>
+        <div align="center">
             Popust:
-            <select onchange="izracunajCeno()" id="popust">
+            <select class="form-select" onchange="izracunajCeno()" id="popust">
                 <option value="1">Osnovni paket -> 0% popust</option>
                 <option value="0.95">Zlati paket -> 5% popust</option>
                 <option value="0.9">Platina paket -> 10% popust</option>
@@ -48,13 +65,13 @@
             </select>
 
             Davek:
-            <select onchange="izracunajCeno()" id="davek">
+            <select class="form-select" onchange="izracunajCeno()" id="davek">
                 <option value="1">Brez davka</option>
                 <option value="1.22">Osnovni davek - 22%</option>
             </select>
 
             Število obrokov:
-            <select onchange="izracunajCeno()" id="obroki">
+            <select class="form-select" onchange="izracunajCeno()" id="obroki">
                 <option value="1">Enkratno plačilo</option>
                 <option value="12">Mesečni obroki</option>
                 <option value="52">Tedenski obroki</option>
@@ -62,12 +79,14 @@
         </div>
     </div>
 
-    <div id="obvestiloKosarica"></div>
+    <div id="obvestiloKosarica" align="center" style="margin-top: 30px;"></div>
 
-    <h1 id="skupniZnesek"></h1>
+    <h1 id="skupniZnesek" align="center"></h1>
 
-    <hr />
-    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+
+    <footer class="w-100" style="text-align: center;">
+        <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+    </footer>
 </body>
 
 </html>

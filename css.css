@@ -27,23 +27,17 @@ table {
     color: rgba(255, 107, 53, 1);
 }
 
-.container {
-    background-color: rgba(70, 105, 149, 1);
-    padding: 0.8em;
-    color: rgba(255, 107, 53, 1);
-}
-
 #gumbRegistracija {
     display: hidden;
 }
 
 #teloTabele, #kosaricaTable {
-    color: white;
+    color: black;
     margin-right: 20px;
 }
 
 #skupniZnesek {
-    color: #FFFF66;
+    color: blueviolet;
     font-family: 'Courier New', Courier, monospace;
 }
 

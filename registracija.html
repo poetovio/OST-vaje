@@ -8,42 +8,74 @@
     <title>Spletna trgovina</title>
     <link rel="stylesheet" href="css.css">
     <script src="js.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> 
 </head>
 
 <script src="registracija.js"></script>
 
 <body>
     <div id="header">
-        <h1>Moja trgovina Diether</h1>
+        <h1 class="belo" style="text-align: center;">Moja trgovina Diether</h1>
 
-        <p id="link">LOGIN | <a href="registracija.html">REGISTRACIJA</a></a></p>
+        <div class="row">
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-12">
+                <div class="dropdown" style="margin-left: 15%;">
+                    <button class="btn btn-light dropdown-toggle"  type="button" id="vrstica" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Meni</button>
+                    <div class="dropdown-menu" aria-labelledby="vrstica">
+                        <a class="dropdown-item" href="index.html">Domov</a>
+                        <a class="dropdown-item" href="izdelki.html">Izdelki</a>
+                        <a class="dropdown-item" href="artikel.html">Vnesite svoj artikel</a>
+                        <a class="dropdown-item" href="narocnina.html">Naročnina</a>
+                        <a class="dropdown-item" href="kosarica.html">Košarica</a>
+                    </div>
+                </div> 
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 col-12" align="center">
+                <a class="btn btn-light" href="#" role="button">LOGIN</a>
+                <a class="btn btn-light" href="registracija.html" role="button">REGISTRACIJA</a>
+            </div>
+        </div> 
     </div>
 
-    <hr />
-    <a href="index.html">Domov</a>
-    <a href="izdelki.html">Izdelki</a>
-    <a href="artikel.html">Vnesite svoj artikel</a>
-    <a href="narocnina.html">Naročnina</a>
-    <hr />
+    <div class="modal" id="uspesnoR" tabindex="-1" role="dialog" aria-labelledby="uporabnikUspesnoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="uporabnikUspesnoLabel">Uspešno</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="gumbArtikel">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <label>Uporabnik je bil uspešno ustvarjen!</label>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div> 
 
     <div class="container">
-        <h2>Registracija</h2>
+        <h2 style="text-align: center;">Registracija</h2>
 
-        <form action="" name="myForm" onsubmit="validate()" method="POST">
-            <table>
+        <form action="" name="myForm" onsubmit="return validate()" method="POST">
+            <table class="table w-100">
                 <tr>
                     <td>
                         Ime
                     </td>
                     <td>
-                        <input type="text" name="ime" />
+                        <input type="text" name="ime" id="vnosIme" required/>
                     </td>
                 <tr>
                     <td>
                         Priimek
                     </td>
                     <td>
-                        <input type="text" name="priimek" />
+                        <input type="text" name="priimek" id="vnosPriimek" required/>
                     </td>
                 </tr>
                 <tr>
@@ -51,7 +83,7 @@
                         Geslo:
                     </td>
                     <td>
-                        <input type="password" name="geslo" />
+                        <input type="password" name="geslo" id="vnosGeslo1" required/>
                     </td>
                 </tr>
                 <tr>
@@ -59,7 +91,7 @@
                         Ponovno geslo:
                     </td>
                     <td>
-                        <input type="password" name="geslo1" />
+                        <input type="password" name="geslo1" id="vnosGeslo2" required/>
                     </td>
                 </tr>
                 <tr>
@@ -76,13 +108,13 @@
                         Ali se strinjate s pogoji?
                     </td>
                     <td>
-                        <input type="checkbox" name="pogoji" value="Y" />
+                        <input type="checkbox" name="pogoji" value="Y" id="vnosStrinjanje" required/>
                     </td>
                 </tr>
                 <tr>
                     <td>Kraj</td>
                     <td>
-                        <select name="kraj">
+                        <select name="kraj" id="vnosKraj" required>
                             <option value="MB">Maribor</option>
                             <option value="LJ">Ljubljana</option>
                         </select>
@@ -91,15 +123,16 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input id="gumbRegistracije" type="submit" name="submit" value="OK">
+                        <input id="gumbRegistracije" data-toggle="modal" type="submit" name="submit" value="OK">
                     </td>
                 </tr>
             </table>
         </form>
     </div>
 
-    <hr />
-    <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+   <footer class="w-100" style="text-align: center;">
+        <i>Kontakt: <a href="mailto:urban.vizintin@student.um.si">urban.vizintin@student.um.si</a></i>
+    </footer> 
 </body>
 
 </html>
