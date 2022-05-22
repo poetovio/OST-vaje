@@ -1,0 +1,60 @@
+{
+    "skladisce": [
+        {
+            "oznaka": "izdelek0",
+            "ime": "Nizkobeljakovinske testenine",
+            "opis": "Testenine z nizko vsebnostjo beljakovin",
+            "kolicina": 30,
+            "cena": 3.5
+        },
+        {
+            "oznaka": "izdelek1",
+            "ime": "Nizkobeljakovinski kruh",
+            "opis": "Kruh z nizko vsebnostjo beljakovin",
+            "kolicina": 25,
+            "cena": 2.6
+        },
+        {
+            "oznaka": "izdelek2",
+            "ime": "Nizkobeljakovinski keksi",
+            "opis": "Keksi z nizko vsebnostjo beljakovin",
+            "kolicina": 15,
+            "cena": 3.2
+        },
+        {
+            "oznaka": "izdelek3",
+            "ime": "Brezglutenski kruh",
+            "opis": "Kruh brez vsebnosti glutena",
+            "kolicina": 40,
+            "cena": 2.1
+        },
+        {
+            "oznaka": "izdelek4",
+            "ime": "Nizkobeljakovinska pizza",
+            "opis": "Pizza z nizko vsebnostjo beljakovin",
+            "kolicina": 10,
+            "cena": 5.8
+        },
+        {
+            "oznaka": "izdelek5",
+            "ime": "Brezglutenske prestice",
+            "opis": "Prestice brez vsebnosti glutena",
+            "kolicina": 25,
+            "cena": 1.9
+        },
+        {
+            "oznaka": "izdelek6",
+            "ime": "Nizkobeljakovinska moka",
+            "opis": "Moka z nizko vsebnostjo beljakovin",
+            "kolicina": 66,
+            "cena": 3.1
+        },
+        {
+            "oznaka": "izdelek7",
+            "ime": "Nizkobeljakovinski špageti",
+            "opis": "Špageti z nizko vsebnostjo beljakovin",
+            "kolicina": 39,
+            "cena": 3.4
+        }
+    ]
+}

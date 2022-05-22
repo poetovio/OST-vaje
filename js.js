@@ -4,6 +4,69 @@ var kosarica = new Array();
 var artikli = new Array();
 var stevilo = 2;
 
+var izdelkiTekst = '{ "skladisce": [' +
+        '{' +
+            '"oznaka": "izdelek0",' +
+            '"ime": "Nizkobeljakovinske testenine",' +
+            '"opis": "Testenine z nizko vsebnostjo beljakovin",' +
+            '"kolicina": 30,'+
+            '"cena": 3.5'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek1",'+
+            '"ime": "Nizkobeljakovinski kruh",'+
+            '"opis": "Kruh z nizko vsebnostjo beljakovin",'+
+            '"kolicina": 25,'+
+            '"cena": 2.6'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek2",'+
+            '"ime": "Nizkobeljakovinski keksi",'+
+            '"opis": "Keksi z nizko vsebnostjo beljakovin",'+
+            '"kolicina": 15,'+
+            '"cena": 3.2'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek3",'+
+            '"ime": "Brezglutenski kruh",'+
+            '"opis": "Kruh brez vsebnosti glutena",'+
+            '"kolicina": 40,'+
+            '"cena": 2.1'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek4",'+
+            '"ime": "Nizkobeljakovinska pizza",'+
+            '"opis": "Pizza z nizko vsebnostjo beljakovin",'+
+            '"kolicina": 10,'+
+            '"cena": 5.8'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek5",'+
+            '"ime": "Brezglutenske prestice",'+
+            '"opis": "Prestice brez vsebnosti glutena",'+
+            '"kolicina": 25,'+
+            '"cena": 1.9'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek6",'+
+            '"ime": "Nizkobeljakovinska moka",'+
+            '"opis": "Moka z nizko vsebnostjo beljakovin",'+
+            '"kolicina": 66,'+
+            '"cena": 3.1'+
+        '},'+
+        '{'+
+            '"oznaka": "izdelek7",'+
+            '"ime": "Nizkobeljakovinski špageti",'+
+            '"opis": "Špageti z nizko vsebnostjo beljakovin",'+
+            '"kolicina": 39,'+
+            '"cena": 3.4'+
+        '}'+
+    ']'+
+'}';
+
+localStorage.setItem("skladisce", izdelkiTekst);
+
+/*
 izdelki.push({
     oznaka: 'izdelek0',
     ime: 'Nizkobeljakovinske testenine',
@@ -67,6 +130,7 @@ izdelki.push({
     kolicina: 39,
     cena: 3.4
 });
+*/
 
 function validate() {
     const ime = document.forms["myForm"]["ime"].value;
@@ -215,11 +279,14 @@ function shraniIzdelek() {
     let cena = document.forms["izdelekForm"]["cenaIzdelka"].value;
     let kolicina = document.forms["izdelekForm"]["kolicinaIzdelka"].value;
 
+    let branjeJSON = JSON.parse(localStorage.getItem('skladisce'));
+
     if(typeof ime === "string") {
         if(cena > 0) {
             if(kolicina > 0) {
                 if(typeof opis === "string") {
-                    izdelki.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
+                    branjeJSON.skladisce.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
+                    localStorage.setItem('skladisce', JSON.stringify(branjeJSON));
                     stevilo++;
                     delovanjeIzdelki();
                     document.getElementById('obvestiloKreiranjeIzdelka').innerHTML = "Izdelek je bil uspesno dodan.";
@@ -317,12 +384,14 @@ function izdelekKosarica(oznaka) {
 }
 
 function delovanjeIzdelki() {
+    let branjeJSON = JSON.parse(localStorage.getItem("skladisce"));
+    
     let izdelkiTabela = document.getElementById("teloTabele");
     izdelkiTabela.innerHTML = "";
     let stevilo = 0;
     let celica = null;
 
-    izdelki.forEach(izdelek => {
+    branjeJSON.skladisce.forEach(izdelek => {
         let vrstica = izdelkiTabela.insertRow(izdelkiTabela.rows.length);
 
         celica = vrstica.insertCell(0);
@@ -373,3 +442,38 @@ function cas(gumb) {
         return;
     }
 }
+
+/*
+
+async function nalaganjeJSON() {
+    await nalaganje();
+
+    
+    let kosarica = localStorage.getItem("skladisce");
+    console.log(kosarica);
+}
+
+async function nalaganje() {
+    try {
+        require(['./zaloga.json'], (file) => {
+            console.log('Delovanje JSON');
+            console.log(file);
+        });
+    } catch (err) {
+        console.log('Napaka ->');
+        console.error(err.message);
+    }
+
+
+    if(localStorage.getItem("skladisce") == null) {
+        try {
+            const odgovor = await fetch("./zaloga.json");
+            const podatki = await odgovor.text();
+            localStorage.setItem("skladisce", podatki);
+        } catch (err) {
+            console.error(err.message);
+        }
+            
+    }
+}
+*/
