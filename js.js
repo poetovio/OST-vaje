@@ -1,136 +1,8 @@
 var kosarica = new Array();
 var izdelki = new Array();
-var kosarica = new Array();
 var artikli = new Array();
 var stevilo = 2;
 
-var izdelkiTekst = '{ "skladisce": [' +
-        '{' +
-            '"oznaka": "izdelek0",' +
-            '"ime": "Nizkobeljakovinske testenine",' +
-            '"opis": "Testenine z nizko vsebnostjo beljakovin",' +
-            '"kolicina": 30,'+
-            '"cena": 3.5'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek1",'+
-            '"ime": "Nizkobeljakovinski kruh",'+
-            '"opis": "Kruh z nizko vsebnostjo beljakovin",'+
-            '"kolicina": 25,'+
-            '"cena": 2.6'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek2",'+
-            '"ime": "Nizkobeljakovinski keksi",'+
-            '"opis": "Keksi z nizko vsebnostjo beljakovin",'+
-            '"kolicina": 15,'+
-            '"cena": 3.2'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek3",'+
-            '"ime": "Brezglutenski kruh",'+
-            '"opis": "Kruh brez vsebnosti glutena",'+
-            '"kolicina": 40,'+
-            '"cena": 2.1'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek4",'+
-            '"ime": "Nizkobeljakovinska pizza",'+
-            '"opis": "Pizza z nizko vsebnostjo beljakovin",'+
-            '"kolicina": 10,'+
-            '"cena": 5.8'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek5",'+
-            '"ime": "Brezglutenske prestice",'+
-            '"opis": "Prestice brez vsebnosti glutena",'+
-            '"kolicina": 25,'+
-            '"cena": 1.9'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek6",'+
-            '"ime": "Nizkobeljakovinska moka",'+
-            '"opis": "Moka z nizko vsebnostjo beljakovin",'+
-            '"kolicina": 66,'+
-            '"cena": 3.1'+
-        '},'+
-        '{'+
-            '"oznaka": "izdelek7",'+
-            '"ime": "Nizkobeljakovinski špageti",'+
-            '"opis": "Špageti z nizko vsebnostjo beljakovin",'+
-            '"kolicina": 39,'+
-            '"cena": 3.4'+
-        '}'+
-    ']'+
-'}';
-
-localStorage.setItem("skladisce", izdelkiTekst);
-
-/*
-izdelki.push({
-    oznaka: 'izdelek0',
-    ime: 'Nizkobeljakovinske testenine',
-    opis: 'Testenine z nizko vsebnostjo beljakovin',
-    kolicina: 30,
-    cena: 3.5
-});
-
-izdelki.push({
-    oznaka: 'izdelek1',
-    ime: 'Nizkobeljakovinski kruh',
-    opis: 'Kruh z nizko vsebnostjo beljakovin',
-    kolicina: 25,
-    cena: 2.6
-});
-
-izdelki.push({
-    oznaka: 'izdelek2',
-    ime: 'Nizkobeljakovinski keksi',
-    opis: 'Keksi z nizko vsebnostjo beljakovin',
-    kolicina: 15,
-    cena: 3.2
-});
-
-izdelki.push({
-    oznaka: 'izdelek3',
-    ime: 'Brezglutenski kruh',
-    opis: 'Kruh brez glutena',
-    kolicina: 40,
-    cena: 2.1
-});
-
-izdelki.push({
-    oznaka: 'izdelek4',
-    ime: 'Nizkobeljakovinska pizza',
-    opis: 'Pizza z nizko vsebnostjo beljakovin',
-    kolicina: 10,
-    cena: 5.8
-});
-
-izdelki.push({
-    oznaka: 'izdelek5',
-    ime: 'Brezglutenske prestice',
-    opis: 'Prestice brez glutena',
-    kolicina: 25,
-    cena: 1.9
-});
-
-izdelki.push({
-    oznaka: 'izdelek6',
-    ime: 'Nizkobeljakovinska moka',
-    opis: 'Moka z nizko vsebnostjo beljakovin',
-    kolicina: 66,
-    cena: 3.1
-});
-
-izdelki.push({
-    oznaka: 'izdelek7',
-    ime: 'Nizkobeljakovinski špageti',
-    opis: 'Špageti z nizko vsebnostjo beljakovin',
-    kolicina: 39,
-    cena: 3.4
-});
-*/
 
 function validate() {
     const ime = document.forms["myForm"]["ime"].value;
@@ -367,8 +239,9 @@ function dodajArtikel() {
 
 function izdelekKosarica(oznaka) {
     let izdelek = null;
+    let branjeIzdelki = JSON.parse(localStorage.getItem("skladisce"));
 
-    izdelki.forEach(product => {
+    branjeIzdelki.skladisce.forEach(product => {
         if(product.oznaka == oznaka) {
             izdelek = product;
             product.kolicina -= 1;
@@ -380,12 +253,13 @@ function izdelekKosarica(oznaka) {
         document.getElementById("obvestiloKreiranjeIzdelka").innerHTML = "Izdelek " + izdelek.ime + " je bil uspešno dodan v košarico.";
     }
     localStorage.setItem("kosarica", JSON.stringify(kosarica));
-    return false;
+    return true;
 }
 
 function delovanjeIzdelki() {
     let branjeJSON = JSON.parse(localStorage.getItem("skladisce"));
-    
+  
+
     let izdelkiTabela = document.getElementById("teloTabele");
     izdelkiTabela.innerHTML = "";
     let stevilo = 0;
@@ -415,6 +289,8 @@ function delovanjeIzdelki() {
 
         stevilo++;
     });
+
+    return true;
 }
 
 function izracunajCeno() {
@@ -443,28 +319,16 @@ function cas(gumb) {
     }
 }
 
-/*
-
 async function nalaganjeJSON() {
     await nalaganje();
 
     
     let kosarica = localStorage.getItem("skladisce");
     console.log(kosarica);
+    delovanjeIzdelki();
 }
 
 async function nalaganje() {
-    try {
-        require(['./zaloga.json'], (file) => {
-            console.log('Delovanje JSON');
-            console.log(file);
-        });
-    } catch (err) {
-        console.log('Napaka ->');
-        console.error(err.message);
-    }
-
-
     if(localStorage.getItem("skladisce") == null) {
         try {
             const odgovor = await fetch("./zaloga.json");
@@ -476,4 +340,3 @@ async function nalaganje() {
             
     }
 }
-*/
