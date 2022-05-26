@@ -3,6 +3,8 @@ var izdelki = new Array();
 var artikli = new Array();
 var stevilo = 2;
 
+localStorage.setItem("kosarica", "[]");
+localStorage.setItem("prijavljenUporabnik", "[]");
 
 function validate() {
     const ime = document.forms["myForm"]["ime"].value;
@@ -60,11 +62,26 @@ function dodaj(izdelek, cena, kolicina, popust) {
     produkt.kolicina = kolicina;
     produkt.popust = popust;
 
-    kosarica.push(produkt);
+    let kosara = JSON.parse(localStorage.getItem("kosarica"));
+
+    let niVTabeli = true;
+
+    kosara.forEach((element, index) => {
+        if(element.oznaka == izdelek.oznaka) {
+            kosara[index].kolicina++;
+            niVTabeli = false;
+        }
+    });
+
+    if(niVTabeli) {
+
+        kosarica.push(produkt);
+        localStorage.setItem("kosarica", JSON.stringify(kosarica));
+    }
+
 
     console.log(kosarica);
 
-    localStorage.setItem("kosarica", JSON.stringify(kosarica));
 }
 
 function generirajId() {
@@ -74,23 +91,22 @@ function generirajId() {
 }
 
 function odstraniIzdelek(oznaka) {
-    kosarica = JSON.parse(localStorage.getItem("kosarica"));
-    let stevilo = 0;
+    kosara = JSON.parse(sessionStorage.getItem("kosarica"));
 
-    kosarica.forEach(izdelek => {
+    kosara.forEach((izdelek, index) => {
         if(izdelek.oznaka == oznaka) {
-            kosarica.splice(stevilo, 1);
+            kosara.splice(index, 1);
             document.getElementById("obvestiloKosarica").innerHTML = "Izdelek " + izdelek.ime + " je bil odstranjen iz kosarice";
         }
-        stevilo++;
     });
 
-    localStorage.setItem("kosarica", JSON.stringify(kosarica));
+    sessionStorage.setItem("kosarica", JSON.stringify(kosara));
+    izracunajCeno();
     generirajTabelo();
 }
 
 function generirajTabelo() {
-    kosarica = JSON.parse(localStorage.getItem("kosarica"));
+    kosarica = JSON.parse(sessionStorage.getItem("kosarica"));
 
     let izdelkiTabela = document.getElementById("kosaricaTable");
     izdelkiTabela.innerHTML = "";
@@ -112,12 +128,29 @@ function generirajTabelo() {
             celica.innerHTML = izdelek.kolicina;
 
             celica = vrstica.insertCell(3);
-            celica.innerHTML = izdelek.cena + " €";
+            celica.innerHTML = izdelek.popust + " %";
 
             celica = vrstica.insertCell(4);
+            celica.innerHTML = izdelek.cena + " €";
+
+            celica = vrstica.insertCell(5);
+            let dodajKolicina = document.createElement('button');
+            dodajKolicina.setAttribute('onclick', "pristejKolicina('" + izdelek.oznaka + "')");
+            dodajKolicina.setAttribute("class", "btn btn-success");
+            dodajKolicina.appendChild(document.createTextNode("+"));
+            celica.appendChild(dodajKolicina);
+
+            celica = vrstica.insertCell(6);
+            let zmanjsajKolicina = document.createElement('button');
+            zmanjsajKolicina.setAttribute('onclick', "odstejKolicina('" + izdelek.oznaka + "')");
+            zmanjsajKolicina.setAttribute("class", "btn btn-danger");
+            zmanjsajKolicina.appendChild(document.createTextNode("-"));
+            celica.appendChild(zmanjsajKolicina);
+
+            celica = vrstica.insertCell(7);
             let gumb = document.createElement('button');
             gumb.setAttribute("onclick", "odstraniIzdelek('" + izdelek.oznaka + "')");
-            gumb.setAttribute("class", "btn btn-success");
+            gumb.setAttribute("class", "btn btn-info");
             gumb.appendChild(document.createTextNode("Odstrani izdelek iz košarice"));
             celica.appendChild(gumb);
 
@@ -125,6 +158,36 @@ function generirajTabelo() {
         });
         izracunajCeno(1, 1, 1);
     }
+}
+
+function pristejKolicina(oznaka) {
+    let kosarica = JSON.parse(sessionStorage.getItem("kosarica"));
+
+    kosarica.forEach((kosara, index)=> {
+        if(kosara.oznaka == oznaka) {
+            kosarica[index].kolicina++;
+        }
+    });
+
+    sessionStorage.setItem("kosarica", JSON.stringify(kosarica));
+    generirajTabelo();
+}
+
+function odstejKolicina(oznaka) {
+    let kosarica = JSON.parse(sessionStorage.getItem("kosarica"));
+
+    kosarica.forEach((kosara, index)=> {
+        if(kosara.oznaka == oznaka) {
+            kosarica[index].kolicina--;
+            if(kosarica[index].kolicina == 0) {
+                kosarica[index].kolicina = 1;
+            }
+        }
+    });
+
+
+    sessionStorage.setItem("kosarica", JSON.stringify(kosarica));
+    generirajTabelo();
 }
 
 function narocninaZnesek() {
@@ -144,6 +207,8 @@ function narocninaZnesek() {
 
     return false;
 }
+
+
 
 function shraniIzdelek() {
     let ime = document.forms["izdelekForm"]["imeIzdelka"].value;
@@ -248,16 +313,44 @@ function izdelekKosarica(oznaka) {
         }
     });
 
-    if(izdelek != null) {
-        kosarica.push(izdelek);
-        document.getElementById("obvestiloKreiranjeIzdelka").innerHTML = "Izdelek " + izdelek.ime + " je bil uspešno dodan v košarico.";
+    let kosara = JSON.parse(sessionStorage.getItem("kosarica"));
+    
+    if(izdelek != null && Object.keys(kosara).length != 0) {
+        let niVtabeli = true;
+    
+        if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
+            alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
+        } else {
+            kosara.forEach((element, index) => {
+                if(element.oznaka == izdelek.oznaka) {
+                    kosara[index].kolicina += parseInt($("#" + izdelek.oznaka + "kol").val());
+                    niVtabeli = false;
+                }
+            });
+        
+            if(niVtabeli) {
+                izdelek.kolicina = $("#" + izdelek.oznaka + "kol").val();
+                kosara.push(izdelek);
+            }
+        }
+
+    } else {
+        if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
+            alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
+        } else {
+            izdelek.kolicina = parseInt($("#" + izdelek.oznaka + "kol").val());
+            kosara.push(izdelek);
+        }
     }
-    localStorage.setItem("kosarica", JSON.stringify(kosarica));
+    
+    document.getElementById("obvestiloKreiranjeIzdelka").innerHTML = "Izdelek " + izdelek.ime + " je bil uspešno dodan v košarico.";
+    console.log(JSON.stringify(kosara));
+    sessionStorage.setItem("kosarica", JSON.stringify(kosara));
     return true;
 }
 
 function delovanjeIzdelki() {
-    let branjeJSON = JSON.parse(localStorage.getItem("skladisce"));
+    let branjeJSON = JSON.parse(sessionStorage.getItem("skladisce"));
   
 
     let izdelkiTabela = document.getElementById("teloTabele");
@@ -275,12 +368,19 @@ function delovanjeIzdelki() {
         celica.innerHTML = izdelek.opis;
         
         celica = vrstica.insertCell(2);
-        celica.innerHTML = izdelek.kolicina;
+        let kolicinaVnos = document.createElement('input');
+        kolicinaVnos.setAttribute('type', 'number');
+        kolicinaVnos.setAttribute('id', izdelek.oznaka + 'kol');
+        kolicinaVnos.setAttribute('value', 1);
+        celica.appendChild(kolicinaVnos);
 
         celica = vrstica.insertCell(3);
-        celica.innerHTML = izdelek.cena + " €";
+        celica.innerHTML = "<img src='" + izdelek.src + "' style='max-width: 300px; width: 100%; max-height: 300px; height: 100%'>";
 
         celica = vrstica.insertCell(4);
+        celica.innerHTML = izdelek.cena + " €";
+
+        celica = vrstica.insertCell(5);
         let gumb = document.createElement('button');
         gumb.setAttribute("onclick", "izdelekKosarica('izdelek" + stevilo + "')");
         gumb.setAttribute("class", "btn btn-success");
@@ -293,8 +393,22 @@ function delovanjeIzdelki() {
     return true;
 }
 
+function nastaviKolicino(oznaka, kolicina) {
+    let kosara = JSON.parse(sessionStorage.getItem("kosarica"));
+    let izdelek = null;
+    kosara.forEach((element, index) => {
+        if(element.oznaka == oznaka) {
+            izdelek = element;
+            kosara[index].kolicina = kolicina;
+        }
+    });
+
+    $("#obvestiloKosarica").innerHTML = "Izdelku " + izdelek.ime + "  v košarici ste uspešno spremenili količino na " + kolicina + ".";
+    sessionStorage.setItem("kosarica", JSON.stringify(kosara));
+}
+
 function izracunajCeno() {
-    kosarica = JSON.parse(localStorage.getItem("kosarica"));
+    let kosara = JSON.parse(sessionStorage.getItem("kosarica"));
     let znesek = 0.0;
     let davek = document.getElementById("davek").value;
     let popust = document.getElementById("popust").value;
@@ -303,8 +417,10 @@ function izracunajCeno() {
     if(kosarica.length == 0) {
         znesek = 0;
     } else {
-        kosarica.forEach(izdelek => {
-            znesek += izdelek.cena;
+        kosara.forEach(izdelek => {
+            for(let i = 0; i < izdelek.kolicina; i++) {
+                znesek += izdelek.cena * ((100 - popust) / 100);
+            }
         });
     }
     
@@ -321,7 +437,6 @@ function cas(gumb) {
 
 async function nalaganjeJSON() {
     await nalaganje();
-
     
     let kosarica = localStorage.getItem("skladisce");
     console.log(kosarica);
@@ -329,14 +444,20 @@ async function nalaganjeJSON() {
 }
 
 async function nalaganje() {
-    if(localStorage.getItem("skladisce") == null) {
-        try {
-            const odgovor = await fetch("./zaloga.json");
-            const podatki = await odgovor.text();
-            localStorage.setItem("skladisce", podatki);
-        } catch (err) {
-            console.error(err.message);
+    $.ajax({
+        url: 'http://localhost:4002/zaloga',
+        type: 'GET',
+        dataType: 'json',
+        crossDomain: true,
+        context: document.body,
+        success: function(data, status) {
+            localStorage.setItem('skladisce', JSON.stringify(data));
         }
-            
-    }
+    });
+
+    /*
+    const odgovor = await fetch('./zaloga.json');
+    const podatki = await odgovor.text();
+    localStorage.setItem("skladisce", podatki);
+    */
 }

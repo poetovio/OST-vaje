@@ -1,0 +1,20 @@
+{
+    "uporabniki": [
+        {
+           "username": "urban",
+            "password": "vizintin"
+        },
+        {
+            "username": "alfi",
+            "password": "nipic"
+        },
+        {
+            "username": "goran",
+            "password": "dragic"
+        },
+        {
+            "username": "chris",
+            "password": "brown"
+        }
+    ]
+}
