@@ -4,7 +4,7 @@ var artikli = new Array();
 var stevilo = 2;
 
 localStorage.setItem("kosarica", "[]");
-sessionStorage.setItem("prijavljenUporabnik", "[]");
+localStorage.setItem("prijavljenUporabnik", "[]");
 sessionStorage.setItem("skladisce", "[]");
 
 function validate() {

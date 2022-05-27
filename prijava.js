@@ -28,7 +28,6 @@ posiljanjeObrazca = (file) => {
         crossDomain: true,
         context: document.body,
         success: function(data, status) {
-            console.log("deluje");
             sessionStorage.setItem("prijavljenUporabnik", JSON.stringify(data));
         },
         error: function(xhr, status, error) {

@@ -31,7 +31,8 @@ app.post('/prijava', async (req, res) => {
 
         for(let i = 0; i < uporabniki.uporabniki.length; i++) {
             if(uporabniki.uporabniki[i].username == podatki.username && uporabniki.uporabniki[i].password == podatki.password) {
-                res.send(podatki);
+                let json = {"id": uporabniki.uporabniki[i].id};
+                res.send(json);
                 uspesnaPrijava = false;
             }
         }
@@ -45,6 +46,33 @@ app.post('/prijava', async (req, res) => {
         console.error(err.message);
     }
 });
+
+app.post('/nakup', async (req, res) => {
+    try {
+
+        const nakup = req.body;
+
+        let zapis = JSON.stringify(nakup);
+
+        fs.readFile(path.join(__dirname, '../nakupi.json'), 'utf8', (err, data) => {
+            if(err) {
+                console.error(err.message);
+            } else {
+                let nakupi = JSON.parse(data);
+                nakupi.nakupi.push(nakup);
+                fs.writeFile(path.join(__dirname, '../nakupi.json'), JSON.stringify(nakupi), err => {
+                    if(err) {
+                        console.error(err.message);
+                    }
+                });
+            }
+        });
+
+    } catch(err) {
+        console.error(err.message);
+    }
+});
+
 
 app.listen(4002, () => {
     console.log(`Server je pognan na portu ${port}`);
