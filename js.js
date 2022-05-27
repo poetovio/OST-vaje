@@ -4,7 +4,8 @@ var artikli = new Array();
 var stevilo = 2;
 
 localStorage.setItem("kosarica", "[]");
-localStorage.setItem("prijavljenUporabnik", "[]");
+sessionStorage.setItem("prijavljenUporabnik", "[]");
+sessionStorage.setItem("skladisce", "[]");
 
 function validate() {
     const ime = document.forms["myForm"]["ime"].value;
@@ -106,16 +107,16 @@ function odstraniIzdelek(oznaka) {
 }
 
 function generirajTabelo() {
-    kosarica = JSON.parse(sessionStorage.getItem("kosarica"));
+    kosara = JSON.parse(sessionStorage.getItem("kosarica"));
 
     let izdelkiTabela = document.getElementById("kosaricaTable");
     izdelkiTabela.innerHTML = "";
     let celica = null;
 
-    if(kosarica.length == 0) {
+    if(kosara.length == 0) {
         izdelkiTabela.innerHTML = "Vaša košarica je prazna. Prosimo, da dodate izdelke v košarico.";
     } else {
-        kosarica.forEach(izdelek => {
+        kosara.forEach(izdelek => {
             let vrstica = izdelkiTabela.insertRow(izdelkiTabela.rows.length);
 
             celica = vrstica.insertCell(0);
@@ -216,14 +217,14 @@ function shraniIzdelek() {
     let cena = document.forms["izdelekForm"]["cenaIzdelka"].value;
     let kolicina = document.forms["izdelekForm"]["kolicinaIzdelka"].value;
 
-    let branjeJSON = JSON.parse(localStorage.getItem('skladisce'));
+    let branjeJSON = JSON.parse(sessionStorage.getItem('skladisce'));
 
     if(typeof ime === "string") {
         if(cena > 0) {
             if(kolicina > 0) {
                 if(typeof opis === "string") {
                     branjeJSON.skladisce.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
-                    localStorage.setItem('skladisce', JSON.stringify(branjeJSON));
+                    sessionStorage.setItem('skladisce', JSON.stringify(branjeJSON));
                     stevilo++;
                     delovanjeIzdelki();
                     document.getElementById('obvestiloKreiranjeIzdelka').innerHTML = "Izdelek je bil uspesno dodan.";
@@ -304,7 +305,7 @@ function dodajArtikel() {
 
 function izdelekKosarica(oznaka) {
     let izdelek = null;
-    let branjeIzdelki = JSON.parse(localStorage.getItem("skladisce"));
+    let branjeIzdelki = JSON.parse(sessionStorage.getItem("skladisce"));
 
     branjeIzdelki.skladisce.forEach(product => {
         if(product.oznaka == oznaka) {
@@ -314,44 +315,49 @@ function izdelekKosarica(oznaka) {
     });
 
     let kosara = JSON.parse(sessionStorage.getItem("kosarica"));
-    
-    if(izdelek != null && Object.keys(kosara).length != 0) {
-        let niVtabeli = true;
-    
-        if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
-            alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
-        } else {
-            kosara.forEach((element, index) => {
-                if(element.oznaka == izdelek.oznaka) {
-                    kosara[index].kolicina += parseInt($("#" + izdelek.oznaka + "kol").val());
-                    niVtabeli = false;
-                }
-            });
+    console.log('dodajanje izdelka v kosaro');
+    console.log(kosara);
+
+    if(kosara != null) {
+        if(izdelek != null && Object.keys(kosara).length != 0) {
+            let niVtabeli = true;
         
-            if(niVtabeli) {
-                izdelek.kolicina = $("#" + izdelek.oznaka + "kol").val();
+            if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
+                alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
+            } else {
+                kosara.forEach((element, index) => {
+                    if(element.oznaka == izdelek.oznaka) {
+                        kosara[index].kolicina += parseInt($("#" + izdelek.oznaka + "kol").val());
+                        niVtabeli = false;
+                    }
+                });
+            
+                if(niVtabeli) {
+                    izdelek.kolicina = $("#" + izdelek.oznaka + "kol").val();
+                    kosara.push(izdelek);
+                }
+            }
+
+        } else {
+            if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
+                alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
+            } else {
+                izdelek.kolicina = parseInt($("#" + izdelek.oznaka + "kol").val());
                 kosara.push(izdelek);
             }
         }
-
-    } else {
-        if(parseInt($("#" + izdelek.oznaka + "kol").val()) <= 0) {
-            alert("Količina izdelka ne sme biti enaka ali manjša od 0!");
-        } else {
-            izdelek.kolicina = parseInt($("#" + izdelek.oznaka + "kol").val());
-            kosara.push(izdelek);
-        }
     }
+
     
     document.getElementById("obvestiloKreiranjeIzdelka").innerHTML = "Izdelek " + izdelek.ime + " je bil uspešno dodan v košarico.";
-    console.log(JSON.stringify(kosara));
     sessionStorage.setItem("kosarica", JSON.stringify(kosara));
     return true;
 }
 
 function delovanjeIzdelki() {
     let branjeJSON = JSON.parse(sessionStorage.getItem("skladisce"));
-  
+
+    console.log(branjeJSON);
 
     let izdelkiTabela = document.getElementById("teloTabele");
     izdelkiTabela.innerHTML = "";
@@ -414,7 +420,7 @@ function izracunajCeno() {
     let popust = document.getElementById("popust").value;
     let obroki = document.getElementById("obroki").value;
 
-    if(kosarica.length == 0) {
+    if(kosara.length == 0) {
         znesek = 0;
     } else {
         kosara.forEach(izdelek => {
@@ -423,6 +429,7 @@ function izracunajCeno() {
             }
         });
     }
+
     
     document.getElementById("skupniZnesek").innerHTML = "Skupni znesek: " + ((davek * popust * znesek)/obroki).toFixed(2) + " €";
 }
@@ -437,10 +444,6 @@ function cas(gumb) {
 
 async function nalaganjeJSON() {
     await nalaganje();
-    
-    let kosarica = localStorage.getItem("skladisce");
-    console.log(kosarica);
-    delovanjeIzdelki();
 }
 
 async function nalaganje() {
@@ -451,7 +454,8 @@ async function nalaganje() {
         crossDomain: true,
         context: document.body,
         success: function(data, status) {
-            localStorage.setItem('skladisce', JSON.stringify(data));
+            sessionStorage.setItem('skladisce', JSON.stringify(data));
+            delovanjeIzdelki();
         }
     });
 
