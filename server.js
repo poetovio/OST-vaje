@@ -105,6 +105,46 @@ app.post('/nakup', async (req, res) => {
     }
 });
 
+app.post('/dodajIzdelek', async (req, res) => {
+
+        const izdelek = req.body;
+
+        try {
+            const najnovejsiIzdelek = new knex('izdelki').max('id as maxId').then(async function(max) {
+
+                console.log(max[0]);
+                const izdelanIzdelek = {
+                    id: max[0].maxId + 1,
+                    oznaka: 'izdelek' + (max[0].maxId + 1),
+                    ime: izdelek.ime,
+                    opis: izdelek.opis,
+                    src: izdelek.src,
+                    kolicina: izdelek.kolicina,
+                    cena: izdelek.cena,
+                    popust: izdelek.popust
+                };
+
+                console.log(izdelanIzdelek);
+
+                const zapisIzdeleka = await new Izdelek().save(izdelanIzdelek);
+                res.json(izdelanIzdelek);
+            });
+        } catch(err) {
+            console.error(err.message);
+        }
+
+});
+
+app.delete('/izbrisiIzdelek/:oznaka', async (req, res) => {
+    try {
+        const oznaka = req.params.oznaka;
+        const izbrisaniIzdelek = await new Izdelek().where('oznaka', oznaka).destroy();
+        res.json({status: 'Izbrisano'});
+    } catch(err) {
+        console.error(err.message);
+    }
+});
+
 
 app.listen(4002, () => {
     console.log(`Server je pognan na portu ${port}`);

@@ -214,17 +214,19 @@ function narocninaZnesek() {
 function shraniIzdelek() {
     let ime = document.forms["izdelekForm"]["imeIzdelka"].value;
     let opis = document.forms["izdelekForm"]["opisIzdelka"].value;
+    let src = document.forms["izdelekForm"]["slikaIzdelka"].value;
     let cena = document.forms["izdelekForm"]["cenaIzdelka"].value;
     let kolicina = document.forms["izdelekForm"]["kolicinaIzdelka"].value;
-
-    let branjeJSON = JSON.parse(sessionStorage.getItem('skladisce'));
+    let popust = document.forms["izdelekForm"]["popustIzdelka"].value;
 
     if(typeof ime === "string") {
         if(cena > 0) {
             if(kolicina > 0) {
                 if(typeof opis === "string") {
-                    branjeJSON.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
-                    sessionStorage.setItem('skladisce', JSON.stringify(branjeJSON));
+
+                    let izdelek = {oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, src: src, kolicina: kolicina, cena: cena, popust: popust};
+
+                    izdelekVBazo(izdelek);
                     stevilo++;
                     delovanjeIzdelki();
                     document.getElementById('obvestiloKreiranjeIzdelka').innerHTML = "Izdelek je bil uspesno dodan.";
@@ -253,7 +255,24 @@ function shraniIzdelek() {
         window.alert("Ime more biti tipa string in dolgo najmanj 3 znake!");
         document.getElementById("imeIzdelka").focus();
     }
+
+    delovanjeIzdelki();
 }
+
+function izdelekVBazo(izdelek) {
+    $.ajax({
+        url: 'http://localhost:4002/dodajIzdelek',
+        type: 'POST',
+        data: izdelek,
+        dataType: 'json',
+        crossDomain: true,
+        context: document.body,
+        success: function(data) {
+            console.log('Izdelek je bil dodan v bazo.');
+        }
+    });
+}
+
 
 function dodajArtikel() {
     let ime = document.forms["artikelForm"]["imeArtikla"].value;
@@ -356,85 +375,122 @@ function izbrisiIzdelek(oznaka) {
     let branjeIzdelki = JSON.parse(sessionStorage.getItem("skladisce"));
     let branjeKosarice = JSON.parse(sessionStorage.getItem("kosarica"));
 
+    let izbrisanIzdelek = "";
+
     branjeIzdelki.forEach((element, index) => {
         if(element.oznaka == oznaka) {
+            izbrisanIzdelek = element.oznaka;
             branjeIzdelki.splice(index, 1);
         }
     }
     );
 
-    branjeKosarice.forEach((element, index) => {
-        if(element.oznaka == oznaka) {
-            branjeKosarice.splice(index, 1);
+    if(branjeKosarice != null) {
+        branjeKosarice.forEach((element, index) => {
+            if(element.oznaka == oznaka) {
+                branjeKosarice.splice(index, 1);
+            }
         }
+        );
     }
-    );
 
     sessionStorage.setItem("skladisce", JSON.stringify(branjeIzdelki));
     sessionStorage.setItem("kosarica", JSON.stringify(branjeKosarice));
-    window.location.reload();
+
+    $.ajax({
+        url: 'http://localhost:4002/izbrisiIzdelek/' + oznaka,
+        type: 'DELETE',
+        dataType: 'json',
+        crossDomain: true,
+        context: document.body,
+        success: function(data) {
+            alert('Izdelek je bil izbrisan iz baze.');
+            delovanjeIzdelki();
+        }
+    });
+
+}
+
+function branjeIzBaze(izdelek) {
+    $.ajax({
+        url: 'http://localhost:4002/zaloga',
+        type: 'GET',
+        dataType: 'json',
+        crossDomain: true,
+        context: document.body,
+        success: function(data) {
+            sessionStorage.setItem("skladisce", JSON.stringify(data));
+        }
+    });
 }
 
 function delovanjeIzdelki() {
-    let branjeJSON = JSON.parse(sessionStorage.getItem("skladisce"));
 
-    let prijavljenUporabnik = JSON.parse(sessionStorage.getItem("prijavljenUporabnik"));
+    $.ajax({
+        url: 'http://localhost:4002/zaloga',
+        type: 'GET',
+        dataType: 'json',
+        crossDomain: true,
+        context: document.body,
+        success: function(data) {
 
-    console.log(prijavljenUporabnik);
+            console.log(data);
+            sessionStorage.setItem("skladisce", JSON.stringify(data));
 
-    let jeAdmin = (prijavljenUporabnik.admin == "true") ? true : false;
+            let prijavljenUporabnik = JSON.parse(sessionStorage.getItem("prijavljenUporabnik"));
 
-    console.log(jeAdmin);
+            let jeAdmin = (prijavljenUporabnik.admin == "true") ? true : false;
 
-    console.log(branjeJSON);
+            let izdelkiTabela = document.getElementById("teloTabele");
+            izdelkiTabela.innerHTML = "";
+            let stevilo = 0;
+            let celica = null;
 
-    let izdelkiTabela = document.getElementById("teloTabele");
-    izdelkiTabela.innerHTML = "";
-    let stevilo = 0;
-    let celica = null;
+            data.forEach(izdelek => {
+                let vrstica = izdelkiTabela.insertRow(izdelkiTabela.rows.length);
 
-    branjeJSON.forEach(izdelek => {
-        let vrstica = izdelkiTabela.insertRow(izdelkiTabela.rows.length);
+                celica = vrstica.insertCell(0);
+                celica.innerHTML = izdelek.ime;
 
-        celica = vrstica.insertCell(0);
-        celica.innerHTML = izdelek.ime;
+                celica = vrstica.insertCell(1);
+                celica.innerHTML = izdelek.opis;
+                
+                celica = vrstica.insertCell(2);
+                let kolicinaVnos = document.createElement('input');
+                kolicinaVnos.setAttribute('type', 'number');
+                kolicinaVnos.setAttribute('id', izdelek.oznaka + 'kol');
+                kolicinaVnos.setAttribute('value', 1);
+                celica.appendChild(kolicinaVnos);
 
-        celica = vrstica.insertCell(1);
-        celica.innerHTML = izdelek.opis;
-        
-        celica = vrstica.insertCell(2);
-        let kolicinaVnos = document.createElement('input');
-        kolicinaVnos.setAttribute('type', 'number');
-        kolicinaVnos.setAttribute('id', izdelek.oznaka + 'kol');
-        kolicinaVnos.setAttribute('value', 1);
-        celica.appendChild(kolicinaVnos);
+                celica = vrstica.insertCell(3);
+                celica.innerHTML = "<img src='" + izdelek.src + "' style='max-width: 300px; width: 100%; max-height: 300px; height: 100%'>";
 
-        celica = vrstica.insertCell(3);
-        celica.innerHTML = "<img src='" + izdelek.src + "' style='max-width: 300px; width: 100%; max-height: 300px; height: 100%'>";
+                celica = vrstica.insertCell(4);
+                celica.innerHTML = izdelek.cena + " €";
 
-        celica = vrstica.insertCell(4);
-        celica.innerHTML = izdelek.cena + " €";
+                celica = vrstica.insertCell(5);
+                let gumb = document.createElement('button');
+                gumb.setAttribute("onclick", "izdelekKosarica('izdelek" + stevilo + "')");
+                gumb.setAttribute("class", "btn btn-success");
+                gumb.appendChild(document.createTextNode("Dodaj izdelek v košarico"));
+                celica.appendChild(gumb);
 
-        celica = vrstica.insertCell(5);
-        let gumb = document.createElement('button');
-        gumb.setAttribute("onclick", "izdelekKosarica('izdelek" + stevilo + "')");
-        gumb.setAttribute("class", "btn btn-success");
-        gumb.appendChild(document.createTextNode("Dodaj izdelek v košarico"));
-        celica.appendChild(gumb);
+                if(jeAdmin) {
+                    celica = vrstica.insertCell(6);
+                    gumb2 = document.createElement('button');
+                    gumb2.setAttribute("onclick", "izbrisiIzdelek('izdelek" + stevilo + "')");
+                    gumb2.setAttribute("class", "btn btn-danger");
+                    gumb2.appendChild(document.createTextNode("Izbriši izdelek"));
+                    celica.appendChild(gumb2);
+                }
 
-        if(jeAdmin) {
-            celica = vrstica.insertCell(6);
-            gumb2 = document.createElement('button');
-            gumb2.setAttribute("onclick", "izbrisiIzdelek('izdelek" + stevilo + "')");
-            gumb2.setAttribute("class", "btn btn-danger");
-            gumb2.appendChild(document.createTextNode("Izbriši izdelek"));
-            celica.appendChild(gumb2);
+                stevilo++;
+            });
+
+            return true;
         }
-
-        stevilo++;
     });
-
-    return true;
+    
 }
 
 function nastaviKolicino(oznaka, kolicina) {
