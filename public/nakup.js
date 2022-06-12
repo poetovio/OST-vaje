@@ -11,11 +11,12 @@ $(document).ready(() => {
         let znesek = $('#skupniZnesek').text();
         const znesekRazreze = znesek.split(' ');
 
-        let datumNakupa =  new Date(Date.now());
 
-        let nakup = { "id": stevilka, "nakupi": nakupi, "znesek": parseFloat(znesekRazreze[2]), "datumNakupa": datumNakupa };
+        let nakup = { "id": stevilka, "nakupi": JSON.stringify(nakupi), "znesek": parseFloat(znesekRazreze[2])};
 
         nakup = JSON.parse(JSON.stringify(nakup));
+
+        console.log(nakup);
 
         izvrsitevNakupa(nakup);
     });
@@ -25,8 +26,8 @@ izvrsitevNakupa = (nakup) => {
     $.ajax({
         url: 'http://localhost:4002/nakup',
         type: 'POST',
-        dataType: 'json',
         data: nakup,
+        dataType: 'json',
         crossDomain: true,
         context: document.body,
         success: function(data, status) {

@@ -21,10 +21,8 @@ $(document).ready(() => {
 
 posiljanjeObrazca = (file) => {
     $.ajax({
-        url: 'http://localhost:4002/prijava',
+        url: 'http://localhost:4002/prijava/' + file.username + '/' + file.password,
         type: 'POST',
-        dataType: 'json',
-        data: file,
         crossDomain: true,
         context: document.body,
         success: function(data, status) {

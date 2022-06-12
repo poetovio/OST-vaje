@@ -223,7 +223,7 @@ function shraniIzdelek() {
         if(cena > 0) {
             if(kolicina > 0) {
                 if(typeof opis === "string") {
-                    branjeJSON.skladisce.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
+                    branjeJSON.push({oznaka: 'izdelek' + stevilo, ime: ime, opis: opis, kolicina: kolicina, cena: cena});
                     sessionStorage.setItem('skladisce', JSON.stringify(branjeJSON));
                     stevilo++;
                     delovanjeIzdelki();
@@ -307,7 +307,7 @@ function izdelekKosarica(oznaka) {
     let izdelek = null;
     let branjeIzdelki = JSON.parse(sessionStorage.getItem("skladisce"));
 
-    branjeIzdelki.skladisce.forEach(product => {
+    branjeIzdelki.forEach(product => {
         if(product.oznaka == oznaka) {
             izdelek = product;
             product.kolicina -= 1;
@@ -364,7 +364,7 @@ function delovanjeIzdelki() {
     let stevilo = 0;
     let celica = null;
 
-    branjeJSON.skladisce.forEach(izdelek => {
+    branjeJSON.forEach(izdelek => {
         let vrstica = izdelkiTabela.insertRow(izdelkiTabela.rows.length);
 
         celica = vrstica.insertCell(0);
@@ -405,7 +405,7 @@ function nastaviKolicino(oznaka, kolicina) {
     kosara.forEach((element, index) => {
         if(element.oznaka == oznaka) {
             izdelek = element;
-            kosara[index].kolicina = kolicina;
+            kosara[index].kolicina = parseInt(kolicina);
         }
     });
 
