@@ -315,8 +315,6 @@ function izdelekKosarica(oznaka) {
     });
 
     let kosara = JSON.parse(sessionStorage.getItem("kosarica"));
-    console.log('dodajanje izdelka v kosaro');
-    console.log(kosara);
 
     if(kosara != null) {
         if(izdelek != null && Object.keys(kosara).length != 0) {
@@ -354,8 +352,39 @@ function izdelekKosarica(oznaka) {
     return true;
 }
 
+function izbrisiIzdelek(oznaka) {
+    let branjeIzdelki = JSON.parse(sessionStorage.getItem("skladisce"));
+    let branjeKosarice = JSON.parse(sessionStorage.getItem("kosarica"));
+
+    branjeIzdelki.forEach((element, index) => {
+        if(element.oznaka == oznaka) {
+            branjeIzdelki.splice(index, 1);
+        }
+    }
+    );
+
+    branjeKosarice.forEach((element, index) => {
+        if(element.oznaka == oznaka) {
+            branjeKosarice.splice(index, 1);
+        }
+    }
+    );
+
+    sessionStorage.setItem("skladisce", JSON.stringify(branjeIzdelki));
+    sessionStorage.setItem("kosarica", JSON.stringify(branjeKosarice));
+    window.location.reload();
+}
+
 function delovanjeIzdelki() {
     let branjeJSON = JSON.parse(sessionStorage.getItem("skladisce"));
+
+    let prijavljenUporabnik = JSON.parse(sessionStorage.getItem("prijavljenUporabnik"));
+
+    console.log(prijavljenUporabnik);
+
+    let jeAdmin = (prijavljenUporabnik.admin == "true") ? true : false;
+
+    console.log(jeAdmin);
 
     console.log(branjeJSON);
 
@@ -392,6 +421,15 @@ function delovanjeIzdelki() {
         gumb.setAttribute("class", "btn btn-success");
         gumb.appendChild(document.createTextNode("Dodaj izdelek v košarico"));
         celica.appendChild(gumb);
+
+        if(jeAdmin) {
+            celica = vrstica.insertCell(6);
+            gumb2 = document.createElement('button');
+            gumb2.setAttribute("onclick", "izbrisiIzdelek('izdelek" + stevilo + "')");
+            gumb2.setAttribute("class", "btn btn-danger");
+            gumb2.appendChild(document.createTextNode("Izbriši izdelek"));
+            celica.appendChild(gumb2);
+        }
 
         stevilo++;
     });

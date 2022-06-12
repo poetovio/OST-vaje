@@ -27,6 +27,7 @@ posiljanjeObrazca = (file) => {
         context: document.body,
         success: function(data, status) {
             sessionStorage.setItem("prijavljenUporabnik", JSON.stringify(data));
+            alert('Uspešno ste se prijavili!');
         },
         error: function(xhr, status, error) {
             alert("Error: " + xhr.status + ":" + xhr.statusText + " | Uporabnik v bazi ne obstaja!");

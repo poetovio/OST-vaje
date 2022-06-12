@@ -5,22 +5,26 @@ exports.seed = function(knex, Promise) {
                 {
                 "id": 1,
                 "username": "urban",
-                "password": "vizintin"
+                "password": "vizintin",
+                "admin": "true"
             },
             {
                 "id": 2,
                 "username": "alfi",
-                "password": "nipic"
+                "password": "nipic",
+                "admin": "false"
             },
             {
                 "id": 3,
                 "username": "goran",
-                "password": "dragic"
+                "password": "dragic",
+                "admin": "false"
             },
             {
                 "id": 4,
                 "username": "chris",
-                "password": "brown"
+                "password": "brown",
+                "admin": "false"
             }
             ]);
         });

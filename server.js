@@ -58,14 +58,12 @@ app.post('/prijava/:username/:password', async (req, res) => {
         const uporabniki = await new Uporabnik().fetchAll();
         const sprememba = uporabniki.toJSON();
 
-        console.log(podatki);
-
         let uspesnaPrijava = true;
 
 
         for(let i = 0; i < sprememba.length; i++) {
             if(sprememba[i].username == podatki.username && sprememba[i].password == podatki.password) {
-                let json = {"id": sprememba[i].id};
+                let json = {"id": sprememba[i].id, "admin": sprememba[i].admin};
                 res.send(json);
                 uspesnaPrijava = false;
             }
