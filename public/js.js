@@ -372,31 +372,6 @@ function izdelekKosarica(oznaka) {
 }
 
 function izbrisiIzdelek(oznaka) {
-    let branjeIzdelki = JSON.parse(sessionStorage.getItem("skladisce"));
-    let branjeKosarice = JSON.parse(sessionStorage.getItem("kosarica"));
-
-    let izbrisanIzdelek = "";
-
-    branjeIzdelki.forEach((element, index) => {
-        if(element.oznaka == oznaka) {
-            izbrisanIzdelek = element.oznaka;
-            branjeIzdelki.splice(index, 1);
-        }
-    }
-    );
-
-    if(branjeKosarice != null) {
-        branjeKosarice.forEach((element, index) => {
-            if(element.oznaka == oznaka) {
-                branjeKosarice.splice(index, 1);
-            }
-        }
-        );
-    }
-
-    sessionStorage.setItem("skladisce", JSON.stringify(branjeIzdelki));
-    sessionStorage.setItem("kosarica", JSON.stringify(branjeKosarice));
-
     $.ajax({
         url: 'http://localhost:4002/izbrisiIzdelek/' + oznaka,
         type: 'DELETE',
@@ -478,7 +453,7 @@ function delovanjeIzdelki() {
                 if(jeAdmin) {
                     celica = vrstica.insertCell(6);
                     gumb2 = document.createElement('button');
-                    gumb2.setAttribute("onclick", "izbrisiIzdelek('izdelek" + stevilo + "')");
+                    gumb2.setAttribute("onclick", "izbrisiIzdelek(" + izdelek.id + ")");
                     gumb2.setAttribute("class", "btn btn-danger");
                     gumb2.appendChild(document.createTextNode("Izbriši izdelek"));
                     celica.appendChild(gumb2);

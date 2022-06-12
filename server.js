@@ -137,8 +137,9 @@ app.post('/dodajIzdelek', async (req, res) => {
 
 app.delete('/izbrisiIzdelek/:oznaka', async (req, res) => {
     try {
-        const oznaka = req.params.oznaka;
-        const izbrisaniIzdelek = await new Izdelek().where('oznaka', oznaka).destroy();
+        let id = parseInt(req.params.oznaka);
+
+        await new Izdelek({id: id}).destroy();
         res.json({status: 'Izbrisano'});
     } catch(err) {
         console.error(err.message);
