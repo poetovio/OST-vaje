@@ -86,8 +86,6 @@ app.post('/nakup', async (req, res) => {
 
         const nakup = req.body;
 
-        console.log(nakup);
-        
         let zapis = JSON.stringify(nakup);
 
         try {
@@ -99,14 +97,11 @@ app.post('/nakup', async (req, res) => {
                     datumNakupa: (new Date(Date.now())).toISOString().split('T')[0]
                 };
                 const zapisNakupa = await new Nakup().save(izdelanNakup);
-                res.send('Nakup je bil uspešno izveden!');
+                res.json(izdelanNakup);
             });
         } catch(err) {
             console.error(err.message);
         }
-
-        console.log(zapis);
-
     } catch(err) {
         console.error(err.message);
     }
